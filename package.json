@@ -1,0 +1,35 @@
+{
+  "name": "wx-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "babel-node ./app.js",
+    "compile": "babel src/ -d lib/ --source-map both"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.14.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "lodash": "^4.15.0",
+    "mongoose": "^4.9.5",
+    "raw-body": "^2.2.0",
+    "sha1": "^1.1.1",
+    "wechat": "^2.1.0",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^7.2.3",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-3": "^6.11.0",
+    "babel-register": "^6.14.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "istanbul": "^1.0.0-alpha.2"
+  }
+}
