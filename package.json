@@ -18,6 +18,7 @@
     "raw-body": "^2.2.0",
     "sha1": "^1.1.1",
     "wechat": "^2.1.0",
+    "wechat-api": "^1.32.1",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
