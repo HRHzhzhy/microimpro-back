@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import path from 'path'
-import { getApi } from '../../utils/wechat'
+import { getApi } from '../wechat/wechat-api'
 import { readFileAsync, writeFileAsync }  from '../../utils/file'
 import { hskList } from './hsk-list.json'
 const api = getApi()
@@ -58,7 +58,7 @@ export const initRobotMediaJson = () => {
       list[value.name].pinyin = value.pinyin
       list[value.name].mediaId = value.mediaId
     })
-    writeFileAsync('/Users/zhenyong/free/microproject/wx-express/controllers/wechat/mediasList.json', {list})
+    writeFileAsync(__dirname + '/mediasList.json', {list})
   })
 }
 /**

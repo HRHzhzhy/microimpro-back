@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { RobotMedia, RobotUser } from '../../models/robot'
 import { list } from '../back/mediasList.json'
 import { strCompare } from '../../utils/compare'
-import { getApi } from '../../utils/wechat'
+import { getApi } from '../wechat/wechat-api'
 const api = getApi()
 const sentToUser = (robotUserId, textMsg, voiceMsg) => {
   api.sendText(robotUserId, textMsg, (err, result) => {
