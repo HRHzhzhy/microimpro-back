@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { getApi } from '../../utils/wechat'
 import { readFileAsync, writeFileAsync }  from '../../utils/file'
+import { hskList } from './hsk-list.json'
 const api = getApi()
 import { RobotMedia, RobotUser, RobotMediaBase} from '../../models/robot'
 // mongoose.Promise = global.Promise
@@ -10,16 +11,20 @@ import { RobotMedia, RobotUser, RobotMediaBase} from '../../models/robot'
 // }).catch((err) => {
 //   console.error('connection err:', err)
 // })
+export const testDirName = () => {
+  console.log(hskList)
+}
 export const initRobotMedia = (filePath) => {
   // 读列表，上传文件，获取mediaid，存到数据库
-  readFileAsync('/Users/zhenyong/free/microproject/wx-express/controllers/wechat/mediasList.txt', 'utf8').then((data) => {
+  // readFileAsync(__dirname + '/mediasList.txt', 'utf8').then((data) => {
     // console.log(data)
+    let data = hskList
     for (let i = 0; i < data.length; i++) {
       let item = {}
       item.pinyin = data[i].pinyin
       item.hanzi = data[i].hanzi
       item.name = data[i].name
-      api.uploadMaterial(`/Users/zhenyong/Downloads/HSK-1/${item.name}.MP3`, 'voice', (err, result) => {
+      api.uploadMaterial(__dirname + `/hsk/${item.name}.MP3`, 'voice', (err, result) => {
         if (err) {
           console.log(`upload ${item.name} failed:`, err)
         } else {
@@ -30,13 +35,17 @@ export const initRobotMedia = (filePath) => {
             name: item.name,
             mediaId: item.mediaId
           })
-          robotMedia.save()
+          robotMedia.save((err, result) => {
+            if (err) {
+              console.log(`${item.name} upload error:${err}`)
+            }
+          })
         }
       })
     }
-  }, (err) => {
-    console.log('')
-  })
+  // }, (err) => {
+  //   console.log('')
+  // })
 }
 export const initRobotMediaJson = () => {
   RobotMedia.find({}).exec((err, medias) => {
@@ -92,29 +101,29 @@ export const initRobotMediaJson = () => {
     total_count: 17,
     item_count: 17 }
  */
-// export const cleanMedia = () => {
-//   // 删除素材
-//   api.getMaterialCount((err, result) => {
-//     console.log(result, 'get file count')
-//     const wxPerPage = 20
-//     let page = Math.ceil(result.voice_count / wxPerPage) // 向上取整
-//     for (let i = 0; i < page; i++) {
-//       let cur = i * wxPerPage
-//       let next = (i + 1) * wxPerPage
-//       if (i === page - 1) {
-//         next = result.voice_count
-//       }
-//       api.getMaterials('voice', cur, next, (err, result) => {
-//         console.log(result, 'get file list')
-//         for (let i = 0; i < result.item.length; i++) {
-//           api.removeMaterial(result.item[i].media_id, (err) => {
-//             err ? console.log(`remove ${result.item[i].name} failed`) : ''
-//           })
-//         }
-//       })
-//     }
-//   })
-// }
+export const cleanMedia = () => {
+  // 删除素材
+  api.getMaterialCount((err, result) => {
+    console.log(result, 'get file count')
+    const wxPerPage = 20
+    let page = Math.ceil(result.voice_count / wxPerPage) // 向上取整
+    for (let i = 0; i < page; i++) {
+      let cur = i * wxPerPage
+      let next = (i + 1) * wxPerPage
+      if (i === page - 1) {
+        next = result.voice_count
+      }
+      api.getMaterials('voice', cur, next, (err, result) => {
+        console.log(result, 'get file list')
+        for (let i = 0; i < result.item.length; i++) {
+          api.removeMaterial(result.item[i].media_id, (err) => {
+            err ? console.log(`remove ${result.item[i].name} failed: ${err}`) : ''
+          })
+        }
+      })
+    }
+  })
+}
 /**
  * 删除某一类素材
  * @param {String} type 图片（image）、视频（video）、语音 （voice）、图文（news）

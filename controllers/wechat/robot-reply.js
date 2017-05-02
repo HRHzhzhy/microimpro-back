@@ -1,7 +1,7 @@
 import { getWechat } from './wechat'
 import mongoose from 'mongoose'
 import { RobotMedia, RobotUser } from '../../models/robot'
-import { list } from '../wechat/mediasList.json'
+import { list } from '../back/mediasList.json'
 import { strCompare } from '../../utils/compare'
 import { getApi } from '../../utils/wechat'
 const api = getApi()
@@ -99,7 +99,7 @@ export const reply = (msg) => {
   // 进入跟读
   // console.log(msg)
   
-  msg.Recognition = msg.Content
+  msg.Content ? msg.Recognition = msg.Content : ''
   if (msg.Recognition.length < 2) {
     sentToUser(msg.FromUserName, '抱歉，我听不清')
     return
@@ -187,7 +187,8 @@ export const reply = (msg) => {
               console.log('err:', err)
             }
         })
-        textMsg = `【再读一次:】你好\n ${list[robotUser.current].hanzi}`
+        textMsg = `请再试一次:`
+        // textMsg = `【请再试一次:】\n ${list[robotUser.current].hanzi}`
         voiceMsg = list[robotUser.current].mediaId
       }
       sentToUser(msg.FromUserName, textMsg, voiceMsg)

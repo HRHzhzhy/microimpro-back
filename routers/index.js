@@ -1,18 +1,31 @@
 import Express from 'express'
-import { readFileAsync, writeFileAsync } from '../utils/file'
-import { getApi } from '../utils/wechat'
-import { initRobotMedia, initRobotMediaJson } from '../controllers/back/robot-action'
-import { list } from '../controllers/wechat/mediasList.json'
-const api = getApi()
+// import { readFileAsync, writeFileAsync } from '../utils/file'
+// import { getApi } from '../utils/wechat'
+import { initRobotMedia, initRobotMediaJson, cleanMedia, testDirName } from '../controllers/back/robot-action'
+// import { list } from '../controllers/wechat/mediasList.json'
+// const api = getApi()
 export const router = Express.Router()
+router.get('/initMedia', (req, res) => {
+  initRobotMedia()
+  res.send('initMedia done')
+})
+router.get('/initMediaJson', (req, res) => {
+  initRobotMediaJson()
+  res.send('initMediaJson done')  
+})
+router.get('/cleanMedia', (req, res) => {
+  cleanMedia()
+  res.send('cleanMedia done')  
+})
 router.get('/', (req, res) => {
+  testDirName()
   // api.getMaterials('voice', 0, 20, (err, result) => {
   //   console.log(result, 'get file list')
   // })
 
   // 初始化media done
   // initRobotMedia()
-  initRobotMediaJson()
+  // initRobotMediaJson()
   
   
 
@@ -82,6 +95,6 @@ router.get('/', (req, res) => {
   //     return c - n
   //   })
   // writeFileAsync('/Users/zhenyong/free/microproject/wx-express/routers/medias.txt' , medias)
-  res.send(list)
+  res.send('test')
 })
 export default exports
